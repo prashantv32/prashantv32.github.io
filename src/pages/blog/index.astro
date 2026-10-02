@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../data/site';
+import { getCollection } from 'astro:content';
+
+// Fetch non-draft posts
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// Sort posts newest first
+allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const postCount = allPosts.length;
+
+// Group posts by year
+const postsByYear = allPosts.reduce(
+  (acc, post) => {
+    const year = post.data.date.getFullYear().toString();
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(post);
+    return acc;
+  },
+  {} as Record<string, typeof allPosts>
+);
+
+const sortedYears = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+function getSlug(post: any): string {
+  return post.slug ?? post.id.replace(/\.(md|mdx)$/, '');
+}
+---
+
+<BaseLayout
+  title={`Blog — ${siteConfig.name}`}
+  description={`All articles, technical notes, and essays by ${siteConfig.name}.`}
+>
+  <header class="blog-header">
+    <h1>Blog</h1>
+    <p class="blog-intro">
+      All {postCount} posts since 2026. Starred (<span class="star-sample">★</span>) are my favorites.
+    </p>
+  </header>
+
+  {
+    sortedYears.length === 0 ? (
+      <p class="empty-state">No posts published yet.</p>
+    ) : (
+      sortedYears.map((year) => (
+        <section class="blog-year-group" aria-labelledby={`year-${year}`}>
+          <h2 id={`year-${year}`} class="blog-year-heading">
+            {year}
+          </h2>
+          <ul class="post-list">
+            {postsByYear[year].map((post) => (
+              <li class="post-row">
+                <time datetime={post.data.date.toISOString()} class="post-date">
+                  {formatDate(post.data.date)}
+                </time>
+                <a href={`/blog/${getSlug(post)}`} class="post-title-link">
+                  {post.data.title}
+                  {post.data.starred && (
+                    <span class="star-badge" title="Starred post" aria-label="Starred post">
+                      ★
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    )
+  }
+</BaseLayout>
+
+<style>
+  .blog-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .blog-intro {
+    font-size: var(--step-0);
+    color: var(--text-muted);
+    margin-top: -0.2em;
+  }
+
+  .star-sample {
+    color: var(--star-color);
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>

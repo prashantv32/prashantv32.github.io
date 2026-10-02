@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO: Replace with your actual domain when deploying
+Sitemap: https://TODO-your-site-url.com/sitemap-index.xml

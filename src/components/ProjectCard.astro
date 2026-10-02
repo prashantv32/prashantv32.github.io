@@ -1,0 +1,32 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  tech: string[];
+  repoUrl: string;
+  liveUrl?: string;
+}
+
+const { title, description, tech, repoUrl, liveUrl } = Astro.props;
+---
+
+<article class="project-card">
+  <div class="project-card-header">
+    <h3 class="project-card-title">{title}</h3>
+    <div class="project-card-link">
+      <a href={repoUrl} target="_blank" rel="noopener noreferrer">Source &rarr;</a>
+      {liveUrl && (
+        <>
+          {' · '}
+          <a href={liveUrl} target="_blank" rel="noopener noreferrer">Live Demo &rarr;</a>
+        </>
+      )}
+    </div>
+  </div>
+  <p class="project-card-desc">{description}</p>
+  <ul class="project-tags" aria-label="Technologies used">
+    {tech.map((item) => (
+      <li class="project-tag">{item}</li>
+    ))}
+  </ul>
+</article>

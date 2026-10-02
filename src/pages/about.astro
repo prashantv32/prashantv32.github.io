@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../data/site';
+---
+
+<BaseLayout
+  title={`About — ${siteConfig.name}`}
+  description={`About ${siteConfig.name}: full-stack developer learning Node.js, Express, and TypeScript.`}
+>
+  <article class="about-page">
+    <header>
+      <h1>About Me</h1>
+      <p class="tagline"><em>{siteConfig.tagline}</em></p>
+    </header>
+
+    <div class="prose">
+      <p>
+        {siteConfig.about.intro}
+      </p>
+
+      <h2>What I'm currently working on</h2>
+      <p>
+        My current technical stack centers on <strong>Node.js</strong>, <strong>Express</strong>, and <strong>TypeScript</strong>:
+      </p>
+      <ul>
+        {siteConfig.about.currentFocus.map((focusItem) => (
+          <li>{focusItem}</li>
+        ))}
+      </ul>
+
+      <h2>Notes API</h2>
+      <p>
+        Recently, I built a production-focused <strong>Notes API</strong> from scratch:
+      </p>
+      <ul>
+        {siteConfig.about.notesApiHighlights.map((highlight) => (
+          <li>{highlight}</li>
+        ))}
+      </ul>
+
+      <h2>Philosophy</h2>
+      <p>
+        {siteConfig.about.philosophy}
+      </p>
+
+      <h2>Connect</h2>
+      <p>
+        Feel free to reach out if you'd like to talk about backend development, TypeScript, or collaborate on projects:
+      </p>
+      <ul class="contact-links">
+        <li>
+          Email: <a href={siteConfig.links.email}>{siteConfig.links.email.replace('mailto:', '')}</a>
+        </li>
+        <li>
+          GitHub:{' '}
+          <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer">
+            {siteConfig.links.github.replace('https://', '')}
+          </a>
+        </li>
+        <li>
+          LinkedIn:{' '}
+          <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer">
+            {siteConfig.links.linkedin.replace('https://', '')}
+          </a>
+        </li>
+        <li>
+          x:{' '}
+          <a href={siteConfig.links.x} target="_blank" rel="noopener noreferrer">
+            {siteConfig.links.x.replace('https://', '')}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .tagline {
+    font-size: var(--step-1);
+    color: var(--text-muted);
+    margin-top: -0.2em;
+    margin-bottom: 1.5em;
+  }
+
+  .contact-links {
+    list-style: none;
+    padding-left: 0;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+  }
+
+  .contact-links li {
+    margin-bottom: 0.5rem;
+  }
+</style>

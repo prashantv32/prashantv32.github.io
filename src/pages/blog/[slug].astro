@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../data/site';
+import { getCollection, render } from 'astro:content';
+import { calculateReadingTime } from '../../utils/readingTime';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => {
+    const slug = (post as any).slug ?? post.id.replace(/\.(md|mdx)$/, '');
+    return {
+      params: { slug },
+      props: { post },
+    };
+  });
+}
+
+const { post } = Astro.props;
+
+// Render markdown content supporting Astro 5 (render helper) or legacy (post.render)
+const { Content } = typeof render === 'function' ? await render(post) : await (post as any).render();
+
+const readingTime = calculateReadingTime(post.body ?? '');
+
+function formatFullDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+---
+
+<BaseLayout
+  title={`${post.data.title} — ${siteConfig.name}`}
+  description={post.data.description}
+  ogType="article"
+  publishedTime={post.data.date.toISOString()}
+>
+  <article class="blog-post">
+    <nav aria-label="Breadcrumb">
+      <a href="/blog" class="back-link">&larr; Back to blog</a>
+    </nav>
+
+    <header class="post-header">
+      <h1 class="post-title">
+        {post.data.title}
+        {post.data.starred && (
+          <span class="star-badge" title="Starred post" aria-label="Starred post">
+            ★
+          </span>
+        )}
+      </h1>
+      <div class="post-meta">
+        <time datetime={post.data.date.toISOString()}>
+          {formatFullDate(post.data.date)}
+        </time>
+        <span aria-hidden="true">&bull;</span>
+        <span>{readingTime}</span>
+      </div>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <div class="post-footer">
+      <hr />
+      <a href="/blog" class="back-link">&larr; Back to all posts</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    margin-top: var(--space-xs);
+  }
+
+  .post-title {
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-xs);
+    line-height: 1.2;
+  }
+
+  .post-meta {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .post-footer {
+    margin-top: var(--space-2xl);
+  }
+</style>

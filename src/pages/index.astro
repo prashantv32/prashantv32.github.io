@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { siteConfig } from '../data/site';
+import { getCollection } from 'astro:content';
+
+// Fetch non-draft posts, sort newest first, and take latest 3
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const latestPosts = allPosts.slice(0, 3);
+
+// Format date helper: "Sep 27"
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+function getSlug(post: any): string {
+  return post.slug ?? post.id.replace(/\.(md|mdx)$/, '');
+}
+
+// Featured projects list
+const featuredProjects = [
+  {
+    title: 'Notes API',
+    description: 'Production-ready RESTful API for notes management with JWT authentication and bcrypt password hashing.',
+    tech: ['Express', 'TypeScript', 'JWT', 'bcrypt'],
+    // TODO: Replace with your actual repository link
+    repoUrl: 'https://github.com/TODO/notes-api',
+  },
+  {
+    title: 'Minimal Portfolio & Blog',
+    description: 'Fast, accessible personal website built with Astro, TypeScript, and semantic typography-first CSS.',
+    tech: ['Astro', 'TypeScript', 'CSS', 'RSS'],
+    // TODO: Replace with your actual repository link
+    repoUrl: 'https://github.com/TODO/portfolio',
+  },
+];
+---
+
+<BaseLayout
+  title={`${siteConfig.name} — ${siteConfig.tagline}`}
+  description={siteConfig.homeIntro}
+>
+  <section class="intro-section" aria-labelledby="intro-heading">
+    <h1 id="intro-heading">{siteConfig.name}</h1>
+    <p class="tagline"><em>{siteConfig.tagline}</em></p>
+    <p class="intro-text">
+      {siteConfig.homeIntro}
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="writing-heading">
+    <div class="section-header">
+      <h2 id="writing-heading">Latest Writing</h2>
+      <a href="/blog" class="section-link">All posts &rarr;</a>
+    </div>
+
+    {
+      latestPosts.length === 0 ? (
+        <p class="empty-state">No posts published yet.</p>
+      ) : (
+        <ul class="post-list">
+          {latestPosts.map((post) => (
+            <li class="post-row">
+              <time datetime={post.data.date.toISOString()} class="post-date">
+                {formatDate(post.data.date)}
+              </time>
+              <a href={`/blog/${getSlug(post)}`} class="post-title-link">
+                {post.data.title}
+                {post.data.starred && (
+                  <span class="star-badge" title="Starred post" aria-label="Starred post">
+                    ★
+                  </span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+
+  <section class="section" aria-labelledby="projects-heading">
+    <div class="section-header">
+      <h2 id="projects-heading">Featured Projects</h2>
+      <a href="/projects" class="section-link">All projects &rarr;</a>
+    </div>
+
+    <div class="projects-grid">
+      {featuredProjects.map((project) => (
+        <ProjectCard
+          title={project.title}
+          description={project.description}
+          tech={project.tech}
+          repoUrl={project.repoUrl}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro-section {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .tagline {
+    font-size: var(--step-1);
+    color: var(--text-muted);
+    margin-top: -0.2em;
+    margin-bottom: 1.25em;
+  }
+
+  .intro-text {
+    font-size: var(--step-0);
+    line-height: 1.75;
+    max-width: 65ch;
+  }
+
+  .section {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.35rem;
+  }
+
+  .section-header h2 {
+    margin: 0;
+    font-size: var(--step-2);
+  }
+
+  .section-link {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  .section-link:hover {
+    text-decoration: underline;
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>

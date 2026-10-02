@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { siteConfig } from '../data/site';
+
+const projects = [
+  {
+    title: 'Notes API',
+    description: 'Production-ready RESTful API for notes management with JWT authentication and bcrypt password hashing.',
+    tech: ['Express', 'TypeScript', 'JWT', 'bcrypt'],
+    // TODO: Replace with your actual GitHub repository URL
+    repoUrl: 'https://github.com/TODO/notes-api',
+  },
+  {
+    title: 'Minimal Portfolio & Blog',
+    description: 'Fast, accessible personal website built with Astro, TypeScript, and semantic typography-first CSS.',
+    tech: ['Astro', 'TypeScript', 'CSS', 'RSS'],
+    // TODO: Replace with your actual GitHub repository URL
+    repoUrl: 'https://github.com/TODO/portfolio',
+  },
+  {
+    title: 'Full-Stack Task Manager',
+    description: 'A full-stack collaborative productivity application with real-time updates and relational database storage.',
+    tech: ['Node.js', 'Express', 'TypeScript', 'PostgreSQL'],
+    // TODO: Replace with your actual GitHub repository URL
+    repoUrl: 'https://github.com/TODO/task-manager',
+  },
+];
+---
+
+<BaseLayout
+  title={`Projects — ${siteConfig.name}`}
+  description={`Featured software engineering and web development projects built by ${siteConfig.name}.`}
+>
+  <header class="projects-page-header">
+    <h1>Projects</h1>
+    <p class="projects-intro">
+      A collection of backend services, full-stack applications, and open-source tools I have built and maintain.
+    </p>
+  </header>
+
+  <div class="projects-grid">
+    {
+      projects.map((project) => (
+        <ProjectCard
+          title={project.title}
+          description={project.description}
+          tech={project.tech}
+          repoUrl={project.repoUrl}
+        />
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .projects-page-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .projects-intro {
+    font-size: var(--step-0);
+    color: var(--text-muted);
+    margin-top: -0.2em;
+  }
+</style>
