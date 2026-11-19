@@ -16,11 +16,9 @@ export interface SiteConfig {
 
     intro: string;
 
-    currentFocus: string[];
 
-    notesApiHighlights: string[];
 
-    philosophy: string;
+    
   };
 
   // External contact and social links
@@ -46,30 +44,18 @@ export const siteConfig: SiteConfig = {
   name: 'Prashant Verma',
 
 
-  tagline: 'Full stack Engineer',
+  tagline: 'Full stack Developer',
 
   // needs good intro - should feel like me
   homeIntro:
-    "tells i build full stack projects not learning , i learn by building something that should feel like me, what i believe or what i do(that difines you) ",
+    "I write about whatever I’m excited about: software development, AI experiments, social media, and everything in between.",
 
   about: {
 
     intro:
-      "Hi, I'm Prashant Verma. I'm learning full-stack web development, mostly backend so far: Node.js, Express and TypeScript. I learn best by building something small, breaking it, and writing about the fix.",
-    currentFocus: [
-      'Node.js and Express backend development',
-      'Strict TypeScript configuration and type-safe application architecture',
-      'RESTful API design, authentication flows, and middleware pipelines',
-    ],
-    notesApiHighlights: [
-      'Stateless authentication using JSON Web Tokens (JWT)',
-      'Secure password hashing and salting with bcrypt',
-      'Strict request validation and custom error handling middleware',
-      'Type-safe service and repository layering in TypeScript',
-    ],
-
-    philosophy:
-      "I believe in learning by doing: build the thing, hit the error, understand it, then write it down so the next beginner has an easier time.",
+      "Hi, I'm Prashant Verma, a full-stack developer who learns by building. I pick a project, learn whatever it demands, ship it, and move on to the next one, each a bit harder than the last. ",
+    
+    
   },
 
   links: {
