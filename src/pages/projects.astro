@@ -2,17 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { siteConfig } from '../data/site';
-
-const projects = [
-  {
-    title: 'Coming soon ...',
-    description: 'checkout my GitHub',
-    tech: ['Express', 'TypeScript', 'MongoDB', 'PostgreSQL','...'],
-
-    repoUrl: 'https://github.com/prashantv32',
-  },
-  
-];
+import { projects } from '../data/projects';
 ---
 
 <BaseLayout

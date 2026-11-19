@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { siteConfig } from '../data/site';
 import { getCollection } from 'astro:content';
+import { projects } from '../data/projects';
 
 // Fetch non-draft posts, sort newest first, and take latest 3
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -22,22 +23,7 @@ function getSlug(post: any): string {
 }
 
 // Featured projects list
-const featuredProjects = [
-  {
-    title: 'Notes API',
-    description: 'Production-ready RESTful API for notes management with JWT authentication and bcrypt password hashing.',
-    tech: ['Express', 'TypeScript', 'JWT', 'bcrypt'],
-    // TODO: Replace with your actual repository link
-    repoUrl: 'https://github.com/TODO/notes-api',
-  },
-  {
-    title: 'Minimal Portfolio & Blog',
-    description: 'Fast, accessible personal website built with Astro, TypeScript, and semantic typography-first CSS.',
-    tech: ['Astro', 'TypeScript', 'CSS', 'RSS'],
-    // TODO: Replace with your actual repository link
-    repoUrl: 'https://github.com/TODO/portfolio',
-  },
-];
+const featuredProjects = projects.slice(0, 2);
 ---
 
 <BaseLayout
